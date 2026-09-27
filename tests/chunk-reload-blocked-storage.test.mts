@@ -13,8 +13,8 @@ describe('chunk reload guard with blocked sessionStorage', () => {
     let listener: EventListenerOrEventListenerObject | undefined;
     let reloads = 0;
     const eventTarget: TestEventTarget = {
-      addEventListener(_type, nextListener) {
-        listener = nextListener;
+      addEventListener(type, nextListener) {
+        if (type === 'vite:preloadError') listener = nextListener;
       },
     };
     const fakeWindow = {

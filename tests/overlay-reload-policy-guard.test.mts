@@ -332,9 +332,9 @@ describe('overlay reload-contract gate', () => {
     assert.deepEqual(unguardedReloadsIn(fixture), []);
   });
 
-  it('both reload consumers are in the scanned population and guarded', () => {
+  it('all reload consumers are in the scanned population and guarded', () => {
     // Without this the lockstep rule could pass by scanning nothing.
-    for (const consumer of ['src/bootstrap/stale-bundle-check.ts', 'src/bootstrap/sw-update.ts']) {
+    for (const consumer of ['src/bootstrap/stale-bundle-check.ts', 'src/bootstrap/sw-update.ts', 'src/bootstrap/chunk-reload.ts']) {
       assert.ok(scan.reloadConsumers.includes(consumer), `${consumer} must be seen as a reload consumer`);
     }
     assert.deepEqual(
@@ -344,8 +344,8 @@ describe('overlay reload-contract gate', () => {
     );
   });
 
-  it('the exemption list is exactly chunk-reload, and it still has the unguarded call it excuses', () => {
-    assert.deepEqual([...RELOAD_GUARD_EXEMPT.keys()], ['src/bootstrap/chunk-reload.ts']);
+  it('no reload consumers require an exemption', () => {
+    assert.deepEqual([...RELOAD_GUARD_EXEMPT.keys()], []);
     assert.deepEqual(scan.staleExemptions, [], 'an exemption that no longer matches an unguarded reload must be deleted');
   });
 });
